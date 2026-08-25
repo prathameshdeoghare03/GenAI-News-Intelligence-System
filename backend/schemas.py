@@ -1,13 +1,13 @@
 from pydantic import BaseModel
 from typing import List, Dict, Any
 
-
 # ---------------- REQUEST ----------------
+
 class NewsRequest(BaseModel):
     text: str
 
-
 # ---------------- RESPONSE ----------------
+
 class PredictionResponse(BaseModel):
     prediction: str
     final_prediction: str
@@ -22,3 +22,4 @@ class PredictionResponse(BaseModel):
     ai_explanation: str
 
     warning: str
+    response_time: str

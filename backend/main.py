@@ -7,20 +7,24 @@ import logging
 import time
 
 # ---------------- LOGGING ----------------
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
+
 logger = logging.getLogger(__name__)
 
 # ---------------- APP INIT ----------------
+
 app = FastAPI(
-    title="GenAI News Intelligence Backend",
+    title="News Intelligence Backend",
     description="AI-powered Fake News Detection using ML + RAG + OpenAI",
     version="3.0.0"
 )
 
 # ---------------- CORS ----------------
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # 🔥 change in production
@@ -30,6 +34,7 @@ app.add_middleware(
 )
 
 # ---------------- ROOT HEALTH ----------------
+
 @app.get("/", tags=["Health"])
 async def root():
     return {
@@ -38,6 +43,7 @@ async def root():
     }
 
 # ---------------- REQUIRED HEALTH ----------------
+
 @app.get("/health", tags=["Health"])
 async def health():
     return {
@@ -45,8 +51,14 @@ async def health():
     }
 
 # ---------------- PREDICTION ----------------
-@app.post("/api/v1/predict", response_model=PredictionResponse, tags=["Prediction"])
+
+@app.post(
+    "/api/v1/predict",
+    response_model=PredictionResponse,
+    tags=["Prediction"]
+)
 async def analyze_news(request: NewsRequest):
+
     start_time = time.time()
 
     try:
@@ -82,12 +94,17 @@ async def analyze_news(request: NewsRequest):
             detail="Internal Server Error"
         )
 
+
 # ---------------- GLOBAL ERROR HANDLER ----------------
+
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
+
     logger.error(f"🔥 Unhandled error: {str(exc)}")
 
     return JSONResponse(
         status_code=500,
-        content={"detail": "Unexpected server error occurred"}
+        content={
+            "detail": "Unexpected server error occurred"
+        }
     )
